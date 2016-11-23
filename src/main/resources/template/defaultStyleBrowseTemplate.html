@@ -1,25 +1,13 @@
 <!--预览视图-->
 <div xmlns:th="http://www.thymeleaf.org" class="settle-up" th:id="${componentId}">
+    <!--/*@thymesVar id="site" type="com.huotu.hotcms.service.entity.Site"*/-->
     <div class="settleup">
         <div class="cw-icon">
             <i class="ci-left"></i>
             <i class="ci-right">&gt;</i>
             <i class="ci-count" id="shopping-amount" th:if="${loginState}" th:text="${shoppingCartCount}">0</i>
-            <a target="_blank" th:href="@{/shoppingCartList(userId=${userId})}">我的购物车</a>
+            <a target="_blank" th:href="${carUrl}">我的购物车</a>
         </div>
     </div>
 </div>
-
-<div class="settle-up">
-    <div class="settleup">
-        <div class="cw-icon">
-            <i class="ci-left"></i>
-            <i class="ci-right">&gt;</i>
-            <i class="ci-count" id="shopping-amount">0</i>
-            <a target="_blank" href="//cart.jd.com/cart.action">我的购物车</a>
-        </div>
-    </div>
-</div>
-
-
 <!--/预览视图-->
