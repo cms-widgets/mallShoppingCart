@@ -12,11 +12,9 @@ package com.huotu.hotcms.widget.mallShoppingCart;
 import com.huotu.hotcms.service.service.MallService;
 import com.huotu.hotcms.widget.*;
 import com.huotu.huobanplus.common.entity.User;
-import com.huotu.huobanplus.sdk.common.repository.MerchantRestRepository;
 import me.jiangcai.lib.resource.service.ResourceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -36,9 +34,6 @@ public class WidgetInfo implements Widget, PreProcessWidget {
     public static final String SHOPPING_CART_COUNT = "shoppingCartCount";
     public static final String USER_ID = "userId";
     public static final String LOGIN_STATE = "loginState";
-    @Autowired
-    private MerchantRestRepository merchantRestRepository;
-
 
     @Override
     public String groupId() {
@@ -103,7 +98,6 @@ public class WidgetInfo implements Widget, PreProcessWidget {
         return null;
     }
 
-
     @Override
     public ComponentProperties defaultProperties(ResourceService resourceService) throws IOException {
         ComponentProperties properties = new ComponentProperties();
@@ -125,18 +119,9 @@ public class WidgetInfo implements Widget, PreProcessWidget {
             variables.put(USER_ID, null);
             variables.put(LOGIN_STATE, false);
         }
-        try {
-            if (CMSContext.RequestContext().getSite().getOwner() != null) {
-                String domain = merchantRestRepository.getOneByPK(CMSContext.RequestContext().getSite().getOwner().getCustomerId())
-                        .getSubDomain();
-                domain = domain + "/Mall/Cart/" + CMSContext.RequestContext().getSite().getOwner().getCustomerId();
-                variables.put("carUrl", domain);
-            }
-            throw new Exception("owner is null");
-        } catch (Exception e) {
-            log.error("error: " + e.getMessage());
-            variables.put("carUrl", "");
-        }
+        String domain = mallService.getMallDomain(CMSContext.RequestContext().getSite().getOwner());
+        domain = domain + "/Mall/Cart/" + CMSContext.RequestContext().getSite().getOwner().getCustomerId();
+        variables.put("carUrl", domain);
 
 
     }
