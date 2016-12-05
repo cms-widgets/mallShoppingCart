@@ -105,13 +105,22 @@ public class WidgetInfo implements Widget, PreProcessWidget {
     }
 
     @Override
+    public boolean disabled() {
+        return CMSContext.RequestContext().getSite().getOwner() != null && CMSContext.RequestContext().getSite().getOwner().getCustomerId() != null;
+    }
+
+    @Override
     public void prepareContext(WidgetStyle style, ComponentProperties properties, Map<String, Object> variables
             , Map<String, String> parameters) {
         MallService mallService = getCMSServiceFromCMSContext(MallService.class);
-        User user = mallService.getLoginUser();
+        User user = null;
+        try {
+            user = mallService.getLoginUser(CMSContext.RequestContext().getRequest(), CMSContext.RequestContext().getSite().getOwner());
+        } catch (Throwable e) {
+            log.error("通讯异常导致无法获取", e);
+        }
         if (user != null) {
-            int count = mallService.getShoppingCartCount(user.getId());
-            variables.put(SHOPPING_CART_COUNT, count);
+            variables.put(SHOPPING_CART_COUNT, 0);
             variables.put(USER_ID, user.getId());
             variables.put(LOGIN_STATE, true);
         } else {
@@ -119,10 +128,15 @@ public class WidgetInfo implements Widget, PreProcessWidget {
             variables.put(USER_ID, null);
             variables.put(LOGIN_STATE, false);
         }
-        String domain = mallService.getMallDomain(CMSContext.RequestContext().getSite().getOwner());
-        domain = domain + "/Mall/Cart/" + CMSContext.RequestContext().getSite().getOwner().getCustomerId();
-        variables.put("carUrl", domain);
-
+        String domain;
+        try {
+            domain = mallService.getMallDomain(CMSContext.RequestContext().getSite().getOwner());
+            domain = "http://" + domain + "/Mall/Cart/" + CMSContext.RequestContext().getSite().getOwner().getCustomerId();
+            variables.put("carUrl", domain);
+        } catch (Throwable e) {
+            log.error("通讯异常", e);
+            variables.put("carUrl", "#");
+        }
 
     }
 
