@@ -36,9 +36,9 @@ public class DefaultWidgetStyle implements WidgetStyle {
     @Override
     public String description(Locale locale) {
         if (locale.equals(Locale.CHINA)) {
-            return "基于bootstrap样式的风格";
+            return "简单的购物车样式，点击购物车即可跳转至购物车列表界面";
         }
-        return "Based on the bootstrap style by mallShoppingCart";
+        return "Simple shopping cart style, click on the shopping cart can jump to the shopping cart list interface";
     }
 
     @Override

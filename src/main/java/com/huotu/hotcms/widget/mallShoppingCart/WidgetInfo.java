@@ -56,9 +56,9 @@ public class WidgetInfo implements Widget, PreProcessWidget {
     @Override
     public String description(Locale locale) {
         if (locale.equals(Locale.CHINA)) {
-            return "这是一个购物车组件，你可以对组件进行自定义修改。";
+            return "这是一个购物车组件，拖拽到布局后即可";
         }
-        return "This is a mallShoppingCart,  you can make custom change the component.";
+        return "This is a mallShoppingCart, you can make custom change the component.";
     }
 
     @Override
